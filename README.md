@@ -91,6 +91,19 @@ For enterprise inquiries, please contact: **business@nextchat.club**
 - Automatically compresses chat history to support long conversations while also saving your tokens
 - I18n: English, 简体中文, 繁体中文, 日本語, Français, Español, Italiano, Türkçe, Deutsch, Tiếng Việt, Русский, Čeština, 한국어, Indonesia
 
+### Local Speech to Text
+
+NextChat can send an audio file to any OpenAI-compatible transcription server,
+including a self-hosted FunASR or SenseVoice service. In **Settings**, enable
+**Speech to Text**, then enter the server URL, model name, and an optional API
+key. The input toolbar shows a microphone button that adds the transcription to
+the current draft without sending it.
+
+The client sends `POST /v1/audio/transcriptions` as multipart form data with
+`file` and `model`. NextChat does not bundle a Python runtime or model weights;
+the configured transcription server remains responsible for inference and CORS
+access.
+
 <div align="center">
    
 ![主界面](./docs/images/cover.png)

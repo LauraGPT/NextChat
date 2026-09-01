@@ -34,6 +34,7 @@ import ConfirmIcon from "../icons/confirm.svg";
 import CloseIcon from "../icons/close.svg";
 import CancelIcon from "../icons/cancel.svg";
 import ImageIcon from "../icons/image.svg";
+import VoiceIcon from "../icons/voice.svg";
 
 import LightIcon from "../icons/light.svg";
 import DarkIcon from "../icons/dark.svg";
@@ -118,6 +119,7 @@ import { getClientConfig } from "../config/client";
 import { useAllModels } from "../utils/hooks";
 import { ClientApi, MultimodalContent } from "../client/api";
 import { createTTSPlayer } from "../utils/audio";
+import { transcribeAudio } from "../utils/stt";
 import { MsEdgeTTS, OUTPUT_FORMAT } from "../utils/ms_edge_tts";
 
 import { isEmpty } from "lodash-es";
@@ -501,6 +503,7 @@ export function ChatActions(props: {
   hitBottom: boolean;
   uploading: boolean;
   setShowShortcutKeyModal: React.Dispatch<React.SetStateAction<boolean>>;
+  userInput: string;
   setUserInput: (input: string) => void;
   setShowChatSidePanel: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
@@ -559,6 +562,7 @@ export function ChatActions(props: {
   const [showSizeSelector, setShowSizeSelector] = useState(false);
   const [showQualitySelector, setShowQualitySelector] = useState(false);
   const [showStyleSelector, setShowStyleSelector] = useState(false);
+  const [isTranscribing, setIsTranscribing] = useState(false);
   const modelSizes = getModelSizes(currentModel);
   const dalle3Qualitys: DalleQuality[] = ["standard", "hd"];
   const dalle3Styles: DalleStyle[] = ["vivid", "natural"];
@@ -568,6 +572,34 @@ export function ChatActions(props: {
   const currentStyle = session.mask.modelConfig?.style ?? "vivid";
 
   const isMobileScreen = useMobileScreen();
+
+  function selectAudioForTranscription() {
+    if (!config.sttConfig.baseUrl.trim()) {
+      showToast(Locale.Settings.STT.BaseUrl.Title);
+      return;
+    }
+
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "audio/*";
+    fileInput.onchange = async (event: Event) => {
+      const file = (event.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+
+      setIsTranscribing(true);
+      try {
+        const text = await transcribeAudio(file, config.sttConfig);
+        props.setUserInput(
+          `${props.userInput}${props.userInput.trim() ? "\n" : ""}${text}`,
+        );
+      } catch (error) {
+        showToast(error instanceof Error ? error.message : String(error));
+      } finally {
+        setIsTranscribing(false);
+      }
+    };
+    fileInput.click();
+  }
 
   useEffect(() => {
     const show = isVisionModel(currentModel);
@@ -626,6 +658,13 @@ export function ChatActions(props: {
             onClick={props.uploadImage}
             text={Locale.Chat.InputActions.UploadImage}
             icon={props.uploading ? <LoadingButtonIcon /> : <ImageIcon />}
+          />
+        )}
+        {config.sttConfig.enable && (
+          <ChatAction
+            onClick={selectAudioForTranscription}
+            text={Locale.Chat.InputActions.Transcribe}
+            icon={isTranscribing ? <LoadingButtonIcon /> : <VoiceIcon />}
           />
         )}
         <ChatAction
@@ -2065,6 +2104,7 @@ function _Chat() {
                   onSearch("");
                 }}
                 setShowShortcutKeyModal={setShowShortcutKeyModal}
+                userInput={userInput}
                 setUserInput={setUserInput}
                 setShowChatSidePanel={setShowChatSidePanel}
               />

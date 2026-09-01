@@ -81,6 +81,7 @@ const cn = {
       Clear: "清除聊天",
       Settings: "对话设置",
       UploadImage: "上传图片",
+      Transcribe: "语音转文字",
     },
     Rename: "重命名对话",
     Typing: "正在输入…",
@@ -594,6 +595,24 @@ const cn = {
       Speed: {
         Title: "速度",
         SubTitle: "生成语音的速度",
+      },
+    },
+    STT: {
+      Enable: {
+        Title: "启用语音转文字",
+        SubTitle: "使用 OpenAI 兼容的 FunASR、SenseVoice 或其他转写服务",
+      },
+      BaseUrl: {
+        Title: "转写服务地址",
+        SubTitle: "服务地址；NextChat 会请求 /v1/audio/transcriptions",
+      },
+      Model: {
+        Title: "转写模型",
+      },
+      ApiKey: {
+        Title: "API Key",
+        SubTitle: "可选；仅发送至配置的转写服务",
+        Placeholder: "可选 API Key",
       },
     },
     Realtime: {

@@ -92,6 +92,13 @@ export const DEFAULT_CONFIG = {
     speed: 1.0,
   },
 
+  sttConfig: {
+    enable: false,
+    baseUrl: "",
+    model: "FunAudioLLM/Fun-ASR-Nano-2512",
+    apiKey: "",
+  },
+
   realtimeConfig: {
     enable: false,
     provider: "OpenAI" as ServiceProvider,
@@ -110,6 +117,7 @@ export type ChatConfig = typeof DEFAULT_CONFIG;
 
 export type ModelConfig = ChatConfig["modelConfig"];
 export type TTSConfig = ChatConfig["ttsConfig"];
+export type STTConfig = ChatConfig["sttConfig"];
 export type RealtimeConfig = ChatConfig["realtimeConfig"];
 
 export function limitNumber(

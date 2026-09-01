@@ -82,6 +82,7 @@ const en: LocaleType = {
       Clear: "Clear Context",
       Settings: "Settings",
       UploadImage: "Upload Images",
+      Transcribe: "Speech to Text",
     },
     Rename: "Rename Chat",
     Typing: "Typing…",
@@ -603,6 +604,25 @@ const en: LocaleType = {
         SubTitle: "The speed of the generated audio",
       },
       Engine: "TTS Engine",
+    },
+    STT: {
+      Enable: {
+        Title: "Enable Speech to Text",
+        SubTitle:
+          "Use an OpenAI-compatible FunASR, SenseVoice, or other transcription service",
+      },
+      BaseUrl: {
+        Title: "Transcription Server URL",
+        SubTitle: "Server URL; NextChat requests /v1/audio/transcriptions",
+      },
+      Model: {
+        Title: "Transcription Model",
+      },
+      ApiKey: {
+        Title: "API Key",
+        SubTitle: "Optional; sent only to the configured transcription server",
+        Placeholder: "Optional API key",
+      },
     },
     Realtime: {
       Enable: {
